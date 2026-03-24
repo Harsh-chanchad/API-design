@@ -87,13 +87,25 @@ Check whether the Excalidraw MCP server is available (`mcp__claude_ai_Excalidraw
 5. **Auth flow** — Show JWT token flow with arrows
 
 ### Excalidraw format rules (when generating JSON):
-- Use `fontFamily: 5` (Excalifont)
-- Horizontal spacing: 250px between sibling boxes
-- Vertical spacing: 120px between layers
+
+**Text on shapes — CRITICAL:** Every shape must include a `label` field for its text. Without this, shapes render as blank boxes.
+```json
+{ "type": "rectangle", "id": "r1", "x": 100, "y": 100, "width": 200, "height": 80,
+  "backgroundColor": "#a5d8ff", "fillStyle": "solid", "roundness": { "type": 3 },
+  "label": { "text": "Auth Middleware", "fontSize": 18 } }
+```
+
+**Other rules:**
+- Always start with `{ "type": "cameraUpdate", "width": 800, "height": 600, "x": 0, "y": 0 }` as the first element
 - Each element needs a unique string `id`
-- Group related elements with a light-background rectangle behind them
-- Use arrow elements to show request flow (top-down)
+- Minimum shape size: 120×60px for labeled boxes
+- Minimum fontSize: 16 for labels, 20 for titles — never below 14
+- Horizontal spacing: 250px between sibling boxes; vertical: 120px between layers
+- Group related elements with a background rectangle (low opacity) behind them
+- Use arrow elements with `"endArrowhead": "arrow"` for request flow
+- Bind arrows to shapes using `startBinding` / `endBinding` with `fixedPoint`
 - Maximum ~25 elements — keep it readable
+- Do NOT use emoji in text — they don't render
 
 ### Example structure:
 ```

@@ -1,13 +1,24 @@
 ---
 name: api-design
 description: >
-  Advanced backend API skill — SDE3 level. Use this whenever the user wants to build a new API, audit an existing one, improve folder structure, generate production-ready code, or get an architectural score. Triggers on: "build me an API", "improve my API", "review my backend", "my API structure is messy", "add auth to my API", "make this production ready", "score my API", "how should I structure my backend", "generate routes/controllers/services", or anything involving backend code quality, security, database optimization, or architecture.
+  Advanced backend API skill — SDE3 level. Use this for ANY question or task that touches backend development, APIs, or server-side systems. This is not about specific phrases — it's about the topic. If the user is working on or asking about anything in the backend space, check whether this skill can help before answering on your own.
+
+  Applies to (but not limited to):
+  - Building a new API or backend service from scratch
+  - Improving, auditing, or reviewing existing backend code
+  - Questions about folder structure, separation of concerns, or project layout
+  - Authentication, authorization, JWT, OAuth, API keys
+  - Database design, query optimization, N+1 problems, indexes, pagination
+  - Security (rate limiting, input validation, headers, CORS, env secrets)
+  - Middleware, error handling, logging, request lifecycle
+  - REST conventions, route design, HTTP status codes
+  - General backend architecture questions — even if the user just asks "how should I structure this?" or "what's the best way to handle X in my backend?"
 
   Two modes:
-  - GENERATE: User describes what they want to build — produce full production-ready code
-  - AUDIT & IMPROVE: User has existing code — score it, diagram it, then improve it
+  - GENERATE: User is building something new — produce full production-ready code
+  - AUDIT & IMPROVE: User has existing code — score it, improve it, explain it
 
-  Always draw an Excalidraw architecture diagram BEFORE writing or changing any code.
+  Do NOT require the user to say specific magic words. If the topic is backend or API related, this skill is relevant.
 ---
 
 # Advanced API Design Skill
@@ -49,24 +60,33 @@ Before touching any code:
 
 ---
 
-## Step 2: Create the Excalidraw Architecture Diagram
+## Step 2: Offer an Excalidraw Architecture Diagram
 
-**Do this before writing any code.** The diagram helps the user see what you're about to build and give feedback before you invest in code.
+Before writing any code, **ask the user** if they'd like a visual diagram first.
 
-Create `api-architecture.excalidraw` showing:
+Say something like:
+> "Before I start, would you like an architecture diagram so you can see the overall structure and give feedback? I can generate it in Excalidraw."
+
+**When to proactively offer (don't wait to be asked):**
+- User wants to build something non-trivial from scratch
+- User says things like "I want to understand how this all fits together", "can you show me the flow", "explain the architecture", "how does this work end to end"
+- AUDIT mode: before proposing structural changes
+
+**If the user says yes:**
+
+Check whether the Excalidraw MCP server is available (`mcp__claude_ai_Excalidraw__create_view` or similar). If it is, use it to create the diagram directly — this gives the user an interactive diagram they can edit. If not, generate the `.excalidraw` JSON file and save as `api-architecture.excalidraw`.
 
 ### What to diagram:
 1. **Client layer** — Browser / Mobile / External Service (top)
 2. **API layer** — Express App box containing:
    - Route files (list the main routes)
    - Middleware chain (Auth → Validation → Rate Limit)
-   - Controllers
-   - Services
+   - Controllers → Services
 3. **Data layer** — Database(s), Redis cache if applicable (bottom)
 4. **External services** — Email, payments, storage (side)
 5. **Auth flow** — Show JWT token flow with arrows
 
-### Excalidraw format rules:
+### Excalidraw format rules (when generating JSON):
 - Use `fontFamily: 5` (Excalifont)
 - Horizontal spacing: 250px between sibling boxes
 - Vertical spacing: 120px between layers
@@ -91,10 +111,10 @@ Create `api-architecture.excalidraw` showing:
 [PostgreSQL DB]    [Redis Cache]
 ```
 
-Save as `api-architecture.excalidraw`.
-Tell the user: "Here's the architecture diagram — open it in Excalidraw or the VS Code extension. Does this structure look right before I generate the code?"
-
+After creating the diagram, ask: "Does this structure look right before I proceed?"
 Wait for confirmation or adjust based on feedback.
+
+**If the user says no or skips:** proceed directly to code — don't block on it.
 
 ---
 

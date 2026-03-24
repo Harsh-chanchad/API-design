@@ -1,0 +1,23 @@
+{
+  "skill_name": "api-design",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I'm building a food delivery app. I need a Node.js + Express + TypeScript backend with users, restaurants, menu items, and orders. Users can browse restaurants, add items to cart, and place orders. Restaurants can manage their menus. Build me the full API structure with authentication, proper folder structure, and make it production-ready.",
+      "expected_output": "Full folder structure with routes/controllers/services/models, JWT auth middleware, input validation with Zod, rate limiting, Excalidraw architecture diagram, .env.example, and a README summarizing decisions.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Here's my current Express API — it's all in one file called server.js. Can you review it, score it, and restructure it properly?\n\n```javascript\nconst express = require('express');\nconst mysql = require('mysql2');\nconst jwt = require('jsonwebtoken');\nconst app = express();\napp.use(express.json());\n\nconst db = mysql.createConnection({ host: 'localhost', user: 'root', password: 'password123', database: 'myapp' });\n\napp.post('/login', async (req, res) => {\n  const { email, password } = req.body;\n  const [users] = await db.promise().query(`SELECT * FROM users WHERE email = '${email}'`);\n  if (users.length === 0) return res.status(401).json({ message: 'Invalid' });\n  const token = jwt.sign({ id: users[0].id }, 'mysecret');\n  res.json({ token });\n});\n\napp.get('/users', async (req, res) => {\n  const [users] = await db.promise().query('SELECT * FROM users');\n  res.json(users);\n});\n\napp.get('/orders', async (req, res) => {\n  const [orders] = await db.promise().query('SELECT * FROM orders');\n  for (let order of orders) {\n    const [user] = await db.promise().query(`SELECT * FROM users WHERE id = ${order.user_id}`);\n    order.user = user[0];\n  }\n  res.json(orders);\n});\n\napp.listen(3000);\n```",
+      "expected_output": "Score breakdown (should be low ~25-35/100), identification of SQL injection vulnerability, hardcoded secret, N+1 query in /orders, missing pagination, missing auth middleware. Full refactored code in proper folder structure with all security fixes.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "I have a SaaS project management API already built with Node.js. It has workspaces, projects, tasks, and team members. Users can belong to multiple workspaces with different roles (owner, admin, member). I want you to audit the architecture and improve it — focus on: making sure workspace-level authorization is correct so users can't access other workspace's data, proper database indexes for the queries we run most (filtering tasks by status and assignee, listing projects by workspace), and make sure there's no way to enumerate other users' data.",
+      "expected_output": "Architecture diagram, score, IDOR vulnerability analysis on workspace authorization, index recommendations for tasks (status + assigneeId composite, workspaceId on projects), improved middleware for workspace-scoped auth, refactored code.",
+      "files": []
+    }
+  ]
+}
